@@ -1,2 +1,42 @@
 spring.application.name: employee-api
 server.port: 8111
+
+employeeService:
+  url: http://localhost:8112/api/v1/employee
+
+resilience4j:
+  retry:
+    instances:
+      mockEmployeeApiRetry:
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.net.ConnectException
+        ignoreExceptions:
+          - com.reliaquest.api.exception.NoDataToDisplayException
+  circuitbreaker:
+    instances:
+      mockEmployeeApiCircuitBreaker:
+        sliding-window-type: COUNT_BASED
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+        waitDurationInOpenState: 3000ms
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 10
+        slowCallRateThreshold: 60
+        slowCallDurationThreshold: 2000ms
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+
+

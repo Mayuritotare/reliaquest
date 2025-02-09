@@ -3,9 +3,27 @@ plugins {
 }
 
 dependencies {
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-circuitbreaker', version: '2.2.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-retry', version: '2.2.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+
 }
 
 springBoot {
     mainClass = 'com.reliaquest.api.ApiApplication'
+}
+test {
+    useJUnitPlatform()
 }

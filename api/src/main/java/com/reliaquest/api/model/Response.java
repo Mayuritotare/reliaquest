@@ -1,4 +1,4 @@
-package com.reliaquest.server.model;
+package com.reliaquest.api.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -19,8 +19,7 @@ public record Response<T>(T data, Status status, String error) {
         return new Response<>(null, Status.ERROR, error);
     }
 
-    public enum
-    Status {
+    public enum Status {
         HANDLED("Successfully processed request."),
         ERROR("Failed to process request.");
 

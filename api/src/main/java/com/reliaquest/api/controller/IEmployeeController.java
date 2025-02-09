@@ -1,6 +1,10 @@
 package com.reliaquest.api.controller;
 
 import java.util.List;
+
+import com.reliaquest.api.model.CreateMockEmployeeInput;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 public interface IEmployeeController<Entity, Input> {
 
+
     @GetMapping()
+    @Retry(name = "mockEmployeeApiRetry")
+    @CircuitBreaker(name = "mockEmployeeApiCircuitBreaker", fallbackMethod = "fallbackResponse")
     ResponseEntity<List<Entity>> getAllEmployees();
 
     @GetMapping("/search/{searchString}")
