@@ -1,6 +1,6 @@
 package com.reliaquest.api.controller;
 
-import com.reliaquest.api.service.EmployeeService;
+import com.reliaquest.api.service.EmployeeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,14 +16,14 @@ import static org.mockito.Mockito.when;
 public class EmployeeControllerImplTest {
 
     @Mock
-    private EmployeeService employeeService;
+    private EmployeeServiceImpl employeeServiceImpl;
 
     @InjectMocks
     private EmployeeControllerImpl employeeController;
 
     @Test
     void getAllEmployeesTest() {
-        when(employeeService.getAllEmployees()).thenReturn(new ArrayList<>());
+        when(employeeServiceImpl.getAllEmployees()).thenReturn(new ArrayList<>());
         var result = employeeController.getAllEmployees();
         assertNotNull(result);
     }
@@ -31,7 +31,7 @@ public class EmployeeControllerImplTest {
     @Test
     void getEmployeesByNameSearchTest(){
         String searchString = "Priyanka Test";
-        when(employeeService.getEmployeesByNameSearch(searchString)).thenReturn(new ArrayList<>());
+        when(employeeServiceImpl.getEmployeesByNameSearch(searchString)).thenReturn(new ArrayList<>());
         var result = employeeController.getEmployeesByNameSearch(searchString);
        assertNotNull(result);
     }
@@ -39,32 +39,32 @@ public class EmployeeControllerImplTest {
     @Test
     void getEmployeeByIdTest(){
         String id = "1e0ff223-e4e7-4738-a769-54651f4a498c1e0ff223-e4e7-4738-a769-54651f4a498c";
-        when(employeeService.getEmployeeById(id)).thenReturn(null);
+        when(employeeServiceImpl.getEmployeeById(id)).thenReturn(null);
         var result = employeeController.getEmployeeById(id);
 //        assertNotNull(result);
     }
 
     @Test
     void getHighestSalaryOfEmployeesTest(){
-        when(employeeService.getHighestSalaryOfEmployees()).thenReturn(null);
+        when(employeeServiceImpl.getHighestSalaryOfEmployees()).thenReturn(null);
         var result = employeeController.getHighestSalaryOfEmployees();
     }
 
     @Test
     void getTopTenHighestEarningEmployeeNamesTest(){
-        when(employeeService.getTopTenHighestEarningEmployeeNames()).thenReturn(null);
+        when(employeeServiceImpl.getTopTenHighestEarningEmployeeNames()).thenReturn(null);
         var result = employeeController.getTopTenHighestEarningEmployeeNames();
     }
 
     @Test
     void createEmployeeTest(){
-        when(employeeService.createEmployee(any())).thenReturn(null);
+        when(employeeServiceImpl.createEmployee(any())).thenReturn(null);
         var result = employeeController.createEmployee(null);
     }
 
     @Test
     public void deleteEmployeeByIdTest(){
-        when(employeeService.deleteEmployeeById(any())).thenReturn(null);
+        when(employeeServiceImpl.deleteEmployeeById(any())).thenReturn(null);
         var result = employeeController.deleteEmployeeById(null);
     }
 }

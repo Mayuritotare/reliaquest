@@ -34,7 +34,7 @@ public class EmployeeServiceTest {
     MockEmployeeClient mockEmployeeClient;
 
     @InjectMocks
-    EmployeeService employeeService;
+    EmployeeServiceImpl employeeServiceImpl;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -50,7 +50,7 @@ public class EmployeeServiceTest {
         Response<List<MockEmployee>> mockResponse = new Response<>(mockEmployeeList, Response.Status.HANDLED, null);
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
-        List<MockEmployee> employees = employeeService.getAllEmployees();
+        List<MockEmployee> employees = employeeServiceImpl.getAllEmployees();
 
         assertNotNull(employees);
         assertEquals(2, employees.size());
@@ -64,7 +64,7 @@ public class EmployeeServiceTest {
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
         NoDataToDisplayException exception = assertThrows(NoDataToDisplayException.class, () -> {
-            employeeService.getAllEmployees();
+            employeeServiceImpl.getAllEmployees();
         });
 
         assertEquals("No Employee to display", exception.getMessage());
@@ -75,7 +75,7 @@ public class EmployeeServiceTest {
         when(mockEmployeeClient.getEmployees()).thenThrow(new RuntimeException("Unexpected error"));
 
         EmployeeServiceExecutionException exception = assertThrows(EmployeeServiceExecutionException.class, () -> {
-            employeeService.getAllEmployees();
+            employeeServiceImpl.getAllEmployees();
         });
 
         assertEquals("Unexpected error", exception.getMessage());
@@ -92,7 +92,7 @@ public class EmployeeServiceTest {
         Response<List<MockEmployee>> mockResponse = new Response<>(mockEmployeeList, Response.Status.HANDLED, null);
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
-        List<MockEmployee> result = employeeService.getEmployeesByNameSearch("Priya");
+        List<MockEmployee> result = employeeServiceImpl.getEmployeesByNameSearch("Priya");
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -112,7 +112,7 @@ public class EmployeeServiceTest {
 
         NoDataToDisplayException exception = assertThrows(
                 NoDataToDisplayException.class,
-                () -> employeeService.getEmployeesByNameSearch("David")
+                () -> employeeServiceImpl.getEmployeesByNameSearch("David")
         );
 
         assertEquals("No Employee found whose name contains  'David'", exception.getMessage());
@@ -124,7 +124,7 @@ public class EmployeeServiceTest {
 
         EmployeeServiceExecutionException exception = assertThrows(
                 EmployeeServiceExecutionException.class,
-                () -> employeeService.getEmployeesByNameSearch("Alice")
+                () -> employeeServiceImpl.getEmployeesByNameSearch("Alice")
         );
 
         assertEquals("API Failure", exception.getMessage());
@@ -139,7 +139,7 @@ public class EmployeeServiceTest {
         ResponseEntity<Response<MockEmployee>> responseEntity = new ResponseEntity<>(mockResponse, HttpStatus.OK);
         when(mockEmployeeClient.getEmployee(mockUuid)).thenReturn(responseEntity);
 
-        MockEmployee result = employeeService.getEmployeeById(mockUuid.toString());
+        MockEmployee result = employeeServiceImpl.getEmployeeById(mockUuid.toString());
 
         assertNotNull(result);
         assertEquals("Priya Biswas", result.getName());
@@ -153,7 +153,7 @@ public class EmployeeServiceTest {
 
         NoDataToDisplayException exception = assertThrows(
                 NoDataToDisplayException.class,
-                () -> employeeService.getEmployeeById(mockUuid.toString())
+                () -> employeeServiceImpl.getEmployeeById(mockUuid.toString())
         );
 
         assertEquals("No employee with given id Exists", exception.getMessage());
@@ -168,7 +168,7 @@ public class EmployeeServiceTest {
 
         NoDataToDisplayException exception = assertThrows(
                 NoDataToDisplayException.class,
-                () -> employeeService.getEmployeeById(mockUuid.toString())
+                () -> employeeServiceImpl.getEmployeeById(mockUuid.toString())
         );
 
         assertEquals("No employee with given id Exists", exception.getMessage());
@@ -181,7 +181,7 @@ public class EmployeeServiceTest {
 
         EmployeeServiceExecutionException exception = assertThrows(
                 EmployeeServiceExecutionException.class,
-                () -> employeeService.getEmployeeById(mockUuid.toString())
+                () -> employeeServiceImpl.getEmployeeById(mockUuid.toString())
         );
 
         assertEquals("API Failure", exception.getMessage());
@@ -191,7 +191,7 @@ public class EmployeeServiceTest {
     void testGetEmployeeById_InvalidUUIDFormat() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> employeeService.getEmployeeById("invalid-uuid")
+                () -> employeeServiceImpl.getEmployeeById("invalid-uuid")
         );
     }
 
@@ -208,7 +208,7 @@ public class EmployeeServiceTest {
         Response<List<MockEmployee>> mockResponse = new Response<>(employeeList, Response.Status.HANDLED, null);
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
-        Integer highestSalary = employeeService.getHighestSalaryOfEmployees();
+        Integer highestSalary = employeeServiceImpl.getHighestSalaryOfEmployees();
 
         assertEquals(68000, highestSalary);
     }
@@ -220,7 +220,7 @@ public class EmployeeServiceTest {
 
         NoDataToDisplayException exception = assertThrows(
                 NoDataToDisplayException.class,
-                () -> employeeService.getHighestSalaryOfEmployees()
+                () -> employeeServiceImpl.getHighestSalaryOfEmployees()
         );
 
         assertEquals("No employee exists ", exception.getMessage());
@@ -241,7 +241,7 @@ public class EmployeeServiceTest {
 
         EmployeeServiceExecutionException exception = assertThrows(
                 EmployeeServiceExecutionException.class,
-                () -> employeeService.getHighestSalaryOfEmployees()
+                () -> employeeServiceImpl.getHighestSalaryOfEmployees()
         );
     }
 
@@ -251,7 +251,7 @@ public class EmployeeServiceTest {
 
         EmployeeServiceExecutionException exception = assertThrows(
                 EmployeeServiceExecutionException.class,
-                () -> employeeService.getHighestSalaryOfEmployees()
+                () -> employeeServiceImpl.getHighestSalaryOfEmployees()
         );
 
         assertEquals("API Failure", exception.getMessage());
@@ -287,7 +287,7 @@ public class EmployeeServiceTest {
         Response<List<MockEmployee>> mockResponse = new Response<>(employeeList, Response.Status.HANDLED, null);
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
-        List<String> topEmployees = employeeService.getTopTenHighestEarningEmployeeNames();
+        List<String> topEmployees = employeeServiceImpl.getTopTenHighestEarningEmployeeNames();
 
         List<String> expectedNames = Arrays.asList("Arjun Deshmukh", "Swati Choudhary", "Tarun Mehta", "Sneha Kulkarni", "Rohan Joshi", "Pooja Nair", "Vikram Singh", "Neha Agarwal", "Anil Kumar", "Sanya Iyer");
         assertEquals(expectedNames, topEmployees);
@@ -311,7 +311,7 @@ public class EmployeeServiceTest {
         Response<List<MockEmployee>> mockResponse = new Response<>(employeeList, Response.Status.HANDLED, null);
         when(mockEmployeeClient.getEmployees()).thenReturn(mockResponse);
 
-        List<String> topEmployees = employeeService.getTopTenHighestEarningEmployeeNames();
+        List<String> topEmployees = employeeServiceImpl.getTopTenHighestEarningEmployeeNames();
 
         List<String> expectedNames = Arrays.asList("Vikram Singh", "Neha Agarwal", "Anil Kumar", "Sanya Iyer", "Rajesh Verma");
         assertEquals(expectedNames, topEmployees);
@@ -325,7 +325,7 @@ public class EmployeeServiceTest {
 
         NoDataToDisplayException exception = assertThrows(
                 NoDataToDisplayException.class,
-                () -> employeeService.getTopTenHighestEarningEmployeeNames()
+                () -> employeeServiceImpl.getTopTenHighestEarningEmployeeNames()
         );
 
         assertEquals("No employee exists ", exception.getMessage());
@@ -337,7 +337,7 @@ public class EmployeeServiceTest {
 
         EmployeeServiceExecutionException exception = assertThrows(
                 EmployeeServiceExecutionException.class,
-                () -> employeeService.getTopTenHighestEarningEmployeeNames()
+                () -> employeeServiceImpl.getTopTenHighestEarningEmployeeNames()
         );
 
         assertEquals("API Failure", exception.getMessage());
@@ -352,7 +352,7 @@ public class EmployeeServiceTest {
         Response<MockEmployee> mockResponse = new Response<>(mockEmployee, Response.Status.HANDLED, null);
         when(mockEmployeeClient.createEmployee(any(CreateMockEmployeeInput.class))).thenReturn(mockResponse);
 
-        MockEmployee result = employeeService.createEmployee(input);
+        MockEmployee result = employeeServiceImpl.createEmployee(input);
 
         assertNotNull(result);
         assertEquals("Rajesh Verma", result.getName());
@@ -371,7 +371,7 @@ public class EmployeeServiceTest {
     void testCreateEmployee_NullInput_ShouldThrowException() {
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> employeeService.createEmployee(null));
+                () -> employeeServiceImpl.createEmployee(null));
         assertEquals("Invalid input type. Expected CreateMockEmployeeInput.", exception.getMessage());
     }
 
@@ -389,21 +389,21 @@ public class EmployeeServiceTest {
 
         // Act & Assert
         EmployeeServiceExecutionException exception = assertThrows(EmployeeServiceExecutionException.class, () ->
-                employeeService.createEmployee(input)
+                employeeServiceImpl.createEmployee(input)
         );
         assertEquals("API Error", exception.getMessage());
     }
 
     @Test
     void deleteEmployeeById_Success() {
-        EmployeeService employeeServiceSpy = spy(employeeService);
+        EmployeeServiceImpl employeeServiceImplSpy = spy(employeeServiceImpl);
         MockEmployee mockEmployee = new MockEmployee(UUID.randomUUID(),"Rajesh Verma", 61000, 35, "Project Manager", "rajesh.verma@example.com");
-        doReturn(mockEmployee).when(employeeServiceSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
+        doReturn(mockEmployee).when(employeeServiceImplSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
 
         Response<Boolean> mockResponse = new Response<>(true, Response.Status.HANDLED, null);
         when(mockEmployeeClient.deleteEmployee(any(DeleteMockEmployeeInput.class))).thenReturn(mockResponse);
 
-        String result = employeeServiceSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
+        String result = employeeServiceImplSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
 
         assertEquals("Employee deleted successfully.", result);
         verify(mockEmployeeClient, times(1)).deleteEmployee(any(DeleteMockEmployeeInput.class));
@@ -412,11 +412,11 @@ public class EmployeeServiceTest {
     @Test
     void deleteEmployeeById_NoEmployeeFound_ThrowsException() {
 
-        EmployeeService employeeServiceSpy = spy(employeeService);
-        doThrow(new NoDataToDisplayException("No employee found")).when(employeeServiceSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
+        EmployeeServiceImpl employeeServiceImplSpy = spy(employeeServiceImpl);
+        doThrow(new NoDataToDisplayException("No employee found")).when(employeeServiceImplSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
 
         NoDataToDisplayException exception = assertThrows(NoDataToDisplayException.class, () ->
-                employeeServiceSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654")
+                employeeServiceImplSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654")
         );
         assertEquals("No employee found", exception.getMessage());
     }
@@ -424,14 +424,14 @@ public class EmployeeServiceTest {
     @Test
     void deleteEmployeeById_ApiFailure_ThrowsException() {
         MockEmployee mockEmployee = new MockEmployee(UUID.randomUUID(),"Rajesh Verma", 61000, 35, "Project Manager", "rajesh.verma@example.com");
-        EmployeeService employeeServiceSpy = spy(employeeService);
-        doReturn(mockEmployee).when(employeeServiceSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
+        EmployeeServiceImpl employeeServiceImplSpy = spy(employeeServiceImpl);
+        doReturn(mockEmployee).when(employeeServiceImplSpy).getEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654");
 
         when(mockEmployeeClient.deleteEmployee(any(DeleteMockEmployeeInput.class)))
                 .thenThrow(new RuntimeException("API Error"));
 
         EmployeeServiceExecutionException exception = assertThrows(EmployeeServiceExecutionException.class, () ->
-                employeeServiceSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654")
+                employeeServiceImplSpy.deleteEmployeeById("59b9797a-d58a-4542-8ba1-812fa44c7654")
         );
         assertEquals("API Error", exception.getMessage());
     }
